@@ -5,15 +5,18 @@ function App() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetch(`http://localhost:3333/products?search=${search}`)
-      .then((res) => res.json())
-      .then((data) => setProdotti(data))
-      .catch((err) => console.error(err));
+    if (!search) return;
+
+    const timer = setTimeout(() => {
+      fetch(`http://localhost:3333/products?search=${search}`)
+        .then((res) => res.json())
+        .then((data) => setProdotti(data))
+        .catch((err) => console.error(err));
+    }, 1000); // debounce qui
+
+    return () => clearTimeout(timer);
   }, [search]);
 
-  const handleSelect = (e) => {
-    setSearch(e.target.value);
-  };
   return (
     <div>
       <h1>I miei prodotti</h1>
@@ -21,7 +24,7 @@ function App() {
         type="text"
         placeholder="Cerca..."
         value={search}
-        onChange={handleSelect}
+        onChange={(e) => setSearch(e.target.value)} // aggiorna subito
       />
       <ul>
         {prodotti.map((p) => (
