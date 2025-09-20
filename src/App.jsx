@@ -12,7 +12,7 @@ function App() {
         .then((res) => res.json())
         .then((data) => setProdotti(data))
         .catch((err) => console.error(err));
-    }, 1000); // debounce qui
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, [search]);
@@ -24,13 +24,9 @@ function App() {
         type="text"
         placeholder="Cerca..."
         value={search}
-        onChange={(e) => setSearch(e.target.value)} // aggiorna subito
+        onChange={(e) => setSearch(e.target.value)}
       />
-      <ul>
-        {prodotti.map((p) => (
-          <li key={p.id}>{p.name}</li>
-        ))}
-      </ul>
+      <ul>{search && prodotti.map((p) => <li key={p.id}>{p.name}</li>)}</ul>
     </div>
   );
 }
